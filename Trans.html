@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartLingo – Transcript Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="css/Main.css">
+<link rel="stylesheet" href="css/Trans.css">
+</head>
+<body class="transcript-page">
+
+<div class="transcript-topbar shared-topbar">
+  <img src="SmartLingo Logo.jpeg" alt="SmartLingo" onclick="location.href='Landing.html'" style="height:32px">
+  <div class="topbar-sep"></div>
+  <span class="topbar-page-title">Transcript</span>
+
+  <div class="search-wrap" style="max-width:320px">
+    <span class="material-icons">search</span>
+    <input class="search-input" type="text" id="searchInput" placeholder="Search transcript…">
+  </div>
+
+
+  <div id="topbarNav"></div>
+
+  <div class="topbar-actions">
+    <button class="btn-dl btn-dl-txt" id="dlTxt">
+      <span class="material-icons" style="font-size:15px">description</span>TXT
+    </button>
+    <button class="btn-dl btn-dl-pdf" id="dlPdf">
+      <span class="material-icons" style="font-size:15px">picture_as_pdf</span>PDF
+    </button>
+  </div>
+</div>
+
+<!--CONTENT-->
+<div class="transcript-content">
+
+  <div class="breadcrumb">
+    <a href="Landing.html">Home</a>
+    <span class="material-icons">chevron_right</span>
+    <a href="Meeting.html">Live Meeting</a>
+    <span class="material-icons">chevron_right</span>
+    <span>Transcript</span>
+  </div>
+
+  <div class="title-section">
+    <h1>Global Product Strategy Q3 Review</h1>
+    <div class="meta-row">
+      <div class="meta-item"><span class="material-icons">calendar_today</span>Oct 24, 2023</div>
+      <div class="meta-item"><span class="material-icons">schedule</span>45m 12s</div>
+      <div class="meta-item"><span class="material-icons">language</span>English → Spanish, Mandarin</div>
+      <div class="participants-wrap">
+        <div class="avatar-stack">
+          <div class="av" style="background:#2563eb">JD</div>
+          <div class="av" style="background:#a855f7">MS</div>
+          <div class="av" style="background:#f97316">AL</div>
+          <div class="av av-extra">+5</div>
+        </div>
+        <span class="participants-label">8 Participants</span>
+      </div>
+    </div>
+  </div>
+
+  <!--TABLE-->
+  <div class="table-card">
+    <div class="table-head">
+      <div class="th">Timestamp</div>
+      <div class="th">Speaker</div>
+      <div class="th">Original Text (EN)</div>
+      <div class="th">Translated (ES)</div>
+    </div>
+    <div id="tableBody"></div>
+    <div class="table-foot">
+      <span class="accuracy-badge" id="accuracyLabel">Auto-translated using SmartLingo Engine v4.2. Accuracy: 98.4%</span>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  <!--BOTTOM CARDS-->
+  <div class="bottom-grid">
+    <div class="bottom-card">
+      <div class="bc-header">
+        <span class="material-icons" style="color:#2563eb">insights</span>
+        <h3>AI Summary</h3>
+      </div>
+      <p class="summary-text">The meeting focused on Q3 growth in European markets. Key decision: Alice will provide a competitive analysis for localized pricing in Nordic regions by Friday. Robert highlighted a 20% engagement increase from localised support.</p>
+    </div>
+
+    <div class="bottom-card">
+      <div class="bc-header">
+        <span class="material-icons" style="color:#22c55e">assignment_turned_in</span>
+        <h3>Action Items</h3>
+      </div>
+      <div class="action-item">
+        <div class="action-check"><span class="material-icons">check</span></div>
+        <span class="action-text">Competitive analysis for Nordic pricing (Alice Liu)</span>
+      </div>
+      <div class="action-item">
+        <div class="action-check"><span class="material-icons">check</span></div>
+        <span class="action-text">Review localized billing API (Engineering)</span>
+      </div>
+      <div class="action-item">
+        <div class="action-check"><span class="material-icons">check</span></div>
+        <span class="action-text">Follow up with Nordic regional team (Mark Smith)</span>
+      </div>
+    </div>
+
+    <div class="bottom-card share-card">
+      <div class="share-icon-wrap"><span class="material-icons">share</span></div>
+      <h3>Share Transcript</h3>
+      <p>Allow team members to view or edit this transcript.</p>
+      <button class="btn-share" id="generateLinkBtn">Generate Share Link</button>
+      <div class="share-link-wrap" id="shareLinkWrap">
+        <div class="share-link-box">
+          <input class="share-link-input" type="text" value="https://sl.app/t/q3-review-2023" readonly id="shareLinkInput">
+          <button class="copy-btn" id="copyBtn">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--QUICK NAV BANNER-->
+  <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+    <a href="Meeting.html" style="text-decoration:none;flex:1;min-width:180px">
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span class="material-icons" style="color:var(--blue);font-size:22px">videocam</span>
+        <div><div style="font-weight:700;font-size:14px">Live Meeting</div><div style="font-size:12px;color:var(--gray)">Return to dashboard</div></div>
+        <span class="material-icons" style="margin-left:auto;color:#94a3b8">chevron_right</span>
+      </div>
+    </a>
+    <a href="Captions.html" style="text-decoration:none;flex:1;min-width:180px">
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span class="material-icons" style="color:var(--blue);font-size:22px">tune</span>
+        <div><div style="font-weight:700;font-size:14px">Caption Settings</div><div style="font-size:12px;color:var(--gray)">Customise subtitles</div></div>
+        <span class="material-icons" style="margin-left:auto;color:#94a3b8">chevron_right</span>
+      </div>
+    </a>
+    <a href="Landing.html" style="text-decoration:none;flex:1;min-width:180px">
+      <div style="background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">
+        <span class="material-icons" style="color:var(--blue);font-size:22px">home</span>
+        <div><div style="font-weight:700;font-size:14px">Home</div><div style="font-size:12px;color:var(--gray)">Back to landing page</div></div>
+        <span class="material-icons" style="margin-left:auto;color:#94a3b8">chevron_right</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!--FOOTER-->
+<footer class="transcript-footer">
+  <div class="t-footer-links">
+    <a href="Landing.html">Home</a>
+    <a href="Login.html">Sign In</a>
+    <a href="Meeting.html">Live Meeting</a>
+    <a href="Captions.html">Caption Settings</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </div>
+  <div class="t-footer-copy">© 2024 SmartLingo AI Platform. All rights reserved.</div>
+</footer>
+
+<div class="toast" id="globalToast"></div>
+<script src="js/Main.js"></script>
+<script src="js/Trans.js"></script>
+</body>
+</html>

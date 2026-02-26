@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartLingo – Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="css/Main.css">
+<link rel="stylesheet" href="css/Login.css">
+</head>
+<body class="login-page">
+
+<header class="shared-topbar">
+  <a href="Landing.html"><img src="SmartLingo Logo.jpeg" alt="SmartLingo"></a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-page-title">Sign In</span>
+
+
+  <div id="topbarNav"></div>
+
+  <div style="display:flex;gap:8px;align-items:center">
+    <a href="Meeting.html" style="text-decoration:none">
+      <button class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:5px">
+        <span class="material-icons" style="font-size:15px">videocam</span>Try Demo
+      </button>
+    </a>
+  </div>
+</header>
+
+<main class="login-main">
+  <div class="login-wrap">
+    <div class="login-card">
+
+      <!--FORM STATE-->
+      <div id="formState">
+        <h1 class="card-title">Welcome back</h1>
+        <p class="card-sub">Please enter your details to sign in.</p>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div class="input-wrap">
+              <input class="form-input" type="email" id="email" placeholder="name@company.com" autocomplete="email">
+            </div>
+            <div class="field-error" id="emailError">Please enter a valid email address.</div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="password">Password</label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+              <button type="button" class="pw-toggle" id="pwToggle" aria-label="Toggle password">
+                <span class="material-icons" style="font-size:20px" id="pwIcon">visibility_off</span>
+              </button>
+            </div>
+            <div class="field-error" id="passwordError">Password must be at least 8 characters.</div>
+          </div>
+
+          <button type="submit" class="btn-signin" id="submitBtn">
+            <span class="btn-text">Sign In</span>
+            <div class="spinner"></div>
+          </button>
+        </form>
+
+        <div class="divider"><div class="divider-line"></div><span>Or continue with</span><div class="divider-line"></div></div>
+
+        <button class="btn-google" id="googleBtn">
+          <div class="google-icon">G</div>Continue with Google
+        </button>
+
+        <div class="signup-row">Don't have an account? <a href="#">Sign up for free</a></div>
+
+        <!--Quick nav for existing users-->
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+          <p style="font-size:12px;color:#94a3b8;text-align:center;margin-bottom:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase">Or jump straight to</p>
+          <div style="display:flex;gap:8px">
+            <a href="Meeting.html" style="flex:1;text-decoration:none">
+              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
+                <span class="material-icons" style="font-size:15px">videocam</span>Meeting
+              </button>
+            </a>
+            <a href="Trans.html" style="flex:1;text-decoration:none">
+              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
+                <span class="material-icons" style="font-size:15px">description</span>Transcript
+              </button>
+            </a>
+            <a href="Captions.html" style="flex:1;text-decoration:none">
+              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
+                <span class="material-icons" style="font-size:15px">tune</span>Captions
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-state" id="successState">
+        <div class="success-icon-wrap"><span class="material-icons">check_circle</span></div>
+        <h3>Signed in successfully!</h3>
+        <p>Redirecting you to your dashboard…</p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!--FOOTER-->
+<footer class="login-footer">
+  <div class="login-footer-links">
+    <a href="Landing.html">Home</a>
+    <a href="Meeting.html">Live Meeting</a>
+    <a href="Trans.html">Transcripts</a>
+    <a href="Captions.html">Caption Settings</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </div>
+  <div class="login-footer-copy">© 2024 SmartLingo AI Inc. All rights reserved.</div>
+</footer>
+
+<div class="toast" id="globalToast"></div>
+<script src="js/Main.js"></script>
+<script src="js/Login.js"></script>
+</body>
+</html>

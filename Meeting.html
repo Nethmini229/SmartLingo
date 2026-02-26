@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartLingo – Live Meeting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="css/Main.css">
+<link rel="stylesheet" href="css/Meeting.css">
+</head>
+<body class="meeting-page">
+
+<div class="meeting-topbar shared-topbar">
+  <img src="SmartLingo Logo.jpeg" alt="SmartLingo" onclick="location.href='Landing.html'" style="height:30px;cursor:pointer">
+  <div class="topbar-sep"></div>
+  <button class="meeting-title-btn" id="meetingTitleBtn">
+    <span id="meetingTitleText">Q3 Product Strategy Review</span>
+    <span class="material-icons" style="font-size:15px;color:#94a3b8">edit</span>
+  </button>
+
+  
+  <div class="topbar-center">
+    <div class="lang-selector" id="langSelector" onclick="document.getElementById('langModal').classList.add('open')" style="cursor:pointer">
+      <span class="lang-from" id="langFrom">English</span>
+      <span class="material-icons lang-arrow" style="font-size:17px">arrow_forward</span>
+      <span class="lang-to" id="langTo">Japanese</span>
+    </div>
+  </div>
+
+  
+  <div id="topbarNav"></div>
+
+  <div class="topbar-right">
+    <div class="offline-group">
+      <span style="font-size:10px;letter-spacing:.5px;font-weight:700">OFFLINE</span>
+      <div class="toggle" id="offlineToggle"></div>
+    </div>
+    <div class="live-pill"><div class="live-dot-anim"></div>LIVE</div>
+  </div>
+</div>
+
+<!--MAIN LAYOUT-->
+<div class="meeting-main">
+
+  <!--GLOSSARY-->
+  <div class="sidebar-left" id="sidebarLeft">
+    <div class="gl-header">
+      <div class="gl-title">
+        <span class="material-icons" style="font-size:18px;color:var(--blue)">book</span>Glossary
+      </div>
+      <span class="gl-count" id="glCount">12 terms</span>
+    </div>
+    <button class="btn-add-term" id="addTermBtn">
+      <span class="material-icons" style="font-size:15px">add</span>Add New Term
+    </button>
+    <div class="glossary-list" id="glossaryList">
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">Hyperconverged</span><span class="gl-badge-active">ACTIVE</span></div><div class="gl-trans">ハイパーコンバージド</div><div class="gl-meta"><span class="material-icons" style="font-size:12px;color:var(--blue)">auto_awesome</span> Corrected 3 times</div></div>
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">Scalability</span></div><div class="gl-trans">スケーラビリティ</div><div class="gl-meta"><span class="material-icons" style="font-size:12px">history</span> Perfect match</div></div>
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">Load Balancer</span></div><div class="gl-trans">ロードバランサ</div><div class="gl-meta"><span class="material-icons" style="font-size:12px;color:var(--blue)">auto_awesome</span> Corrected 1 time</div></div>
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">Throughput</span></div><div class="gl-trans">スループット</div></div>
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">Microservice</span></div><div class="gl-trans">マイクロサービス</div></div>
+      <div class="gl-item"><div class="gl-item-top"><span class="gl-term">API Gateway</span></div><div class="gl-trans">APIゲートウェイ</div></div>
+    </div>
+    <div class="gl-footer">
+      <span class="gl-adaptive-label">AI Adaptive Learning</span>
+      <span class="gl-adaptive-val">Enabled</span>
+    </div>
+  </div>
+
+  <!--TRANSCRIPT-->
+  <div class="center-pane">
+    <div class="transcript-area" id="transcriptArea">
+      <div class="utterance">
+        <div class="utterance-meta">Speaker 1 &bull; 14:02:15</div>
+        <div class="utterance-orig">"I think we should focus on the hyperconverged infrastructure for the upcoming quarter."</div>
+        <div class="utterance-trans">今期は、ハイパーコンバージド・インフラストラクチャに焦点を当てるべきだと思います。</div>
+      </div>
+      <div class="utterance">
+        <div class="utterance-meta">Speaker 2 &bull; 14:02:22</div>
+        <div class="utterance-orig">"That makes sense, especially considering the current scalability needs of our enterprise clients."</div>
+        <div class="utterance-trans">それは理にかなっています。特に、現在のエンタープライズクライアントのスケーラビリティのニーズを考慮するとなおさらです。</div>
+      </div>
+      <div class="utterance active-utt" id="activeUtterance">
+        <div class="utterance-meta"><span class="spk-dot"></span>Speaker 1 &bull; 14:02:30</div>
+        <div class="utterance-orig">"What are the initial projections for the load balancer efficiency?"</div>
+        <div class="utterance-trans">ロードバランサの効率に関する初期予測はどうなっていますか？</div>
+      </div>
+    </div>
+
+    <div class="audio-bar">
+      <div class="audio-pill" id="audioPill">
+        <div class="waveform">
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <span class="audio-label">Audio Capturing</span>
+        <button style="background:none;border:none;cursor:pointer;color:#94a3b8;display:flex;margin-left:6px" id="pauseBtn">
+          <span class="material-icons" style="font-size:18px" id="pauseIcon">pause</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!--CONTROLS-->
+  <div class="sidebar-right">
+    <div class="right-section">
+      <div class="right-label">Microphone</div>
+      <div class="mic-row">
+        <div><div class="mic-name">Default Input</div><div class="mic-sub">Logitech Brio Stream mic</div></div>
+        <button class="mic-icon-btn" id="micBtn">
+          <span class="material-icons" style="font-size:18px" id="micIcon">mic</span>
+        </button>
+      </div>
+      <button class="btn-switch" id="switchDeviceBtn">SWITCH DEVICE</button>
+    </div>
+
+    <div class="right-section">
+      <div class="right-label">Caption Settings</div>
+      <div class="caption-row">
+        <span class="caption-label">Text Size</span>
+        <div class="text-size-btns">
+          <button class="ts-btn" data-size="sm">A</button>
+          <button class="ts-btn active" data-size="md">A</button>
+          <button class="ts-btn" data-size="lg">A</button>
+        </div>
+      </div>
+      <div class="caption-row">
+        <span class="caption-label">Speaker Labels</span>
+        <div class="toggle-sm" id="speakerLabelToggle"></div>
+      </div>
+      <div class="caption-row">
+        <span class="caption-label">Original Text</span>
+        <div class="toggle-sm" id="origTextToggle"></div>
+      </div>
+    </div>
+
+    <!--CONNECTED action links-->
+    <a class="action-link" href="Trans.html">
+      <span class="material-icons">description</span>
+      <span class="a-label">View Full Transcript</span>
+      <span class="material-icons a-chev">chevron_right</span>
+    </a>
+    <a class="action-link" href="Captions.html">
+      <span class="material-icons">tune</span>
+      <span class="a-label">Caption Settings</span>
+      <span class="material-icons a-chev">chevron_right</span>
+    </a>
+    <a class="action-link" href="Landing.html">
+      <span class="material-icons">home</span>
+      <span class="a-label">Back to Home</span>
+      <span class="material-icons a-chev">chevron_right</span>
+    </a>
+    <a class="action-link" href="#" id="clearBtn">
+      <span class="material-icons">delete_sweep</span>
+      <span class="a-label">Clear Subtitles</span>
+    </a>
+
+    <div class="stats-panel">
+      <div class="stat-row"><span class="stat-label">Latency</span><span class="stat-value green" id="latencyStat">124ms</span></div>
+      <div class="stat-row"><span class="stat-label">Engine</span><span class="stat-value">SmartLingo v4.2</span></div>
+      <div class="stat-row"><span class="stat-label">Data Usage</span><span class="stat-value" id="dataStat">1.2 MB / min</span></div>
+    </div>
+  </div>
+</div>
+
+<!--STATUS BAR-->
+<div class="meeting-statusbar">
+  <div class="status-left">
+    <div class="status-green-dot"></div>
+    <span>SYSTEM READY</span><span class="status-sep">|</span><span>Encrypted P2P Connection Active</span>
+  </div>
+  <div class="status-right">© 2024 SmartLingo AI · Professional Edition</div>
+</div>
+
+<!--LANGUAGE MODAL-->
+<div class="lang-modal-overlay" id="langModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="lang-modal-box">
+    <h3>Change Languages</h3>
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Source Language</label>
+    <select class="lang-select" id="fromLangSelect">
+      <option>English</option><option>Spanish</option><option>French</option>
+      <option>German</option><option>Chinese</option><option>Japanese</option>
+      <option>Korean</option><option>Arabic</option><option>Portuguese</option>
+    </select>
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Target Language</label>
+    <select class="lang-select" id="toLangSelect">
+      <option>Japanese</option><option>Spanish</option><option>French</option>
+      <option>German</option><option>Chinese</option><option>English</option>
+      <option>Korean</option><option>Arabic</option><option>Portuguese</option>
+    </select>
+    <div class="lang-modal-btns">
+      <button class="btn-cancel" style="flex:1;padding:11px" id="langModalClose" onclick="document.getElementById('langModal').classList.remove('open')">Cancel</button>
+      <button class="btn-save" style="flex:2;padding:11px" id="applyLangBtn" onclick="document.getElementById('langFrom').textContent=document.getElementById('fromLangSelect').value; document.getElementById('langTo').textContent=document.getElementById('toLangSelect').value; document.getElementById('langModal').classList.remove('open')">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!--ADD TERM MODAL-->
+<div class="term-modal-overlay" id="termModal">
+  <div class="term-modal-box">
+    <h3>Add Glossary Term</h3>
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Term (Source)</label>
+    <input class="term-input" type="text" id="termInput" placeholder="e.g. Kubernetes">
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:6px">Translation</label>
+    <input class="term-input" type="text" id="transInput" placeholder="e.g. クーバネティス">
+    <div class="lang-modal-btns">
+      <button class="btn-cancel" style="flex:1;padding:11px" id="termModalClose">Cancel</button>
+      <button class="btn-save" style="flex:2;padding:11px" id="addTermConfirm">Add Term</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="cap-modal-overlay" id="capModal">
+  <div class="cap-modal-box">
+    <div class="cap-modal-head">
+      <div><h2>Quick Caption Settings</h2><p>Or <a href="Captions.html" style="color:var(--blue);font-weight:700">open full settings page →</a></p></div>
+      <button class="cap-modal-close" id="capModalClose">✕</button>
+    </div>
+    <div class="preview-wrap">
+      <div class="preview-label">LIVE PREVIEW</div>
+      <div class="preview-window">
+        <div class="subtitle-preview" id="subtitlePreview">
+          <p id="previewText">"The quick brown fox jumps over the lazy dog."</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-controls">
+      <div>
+        <div class="ctrl-label">Font Size</div>
+        <input type="range" id="fontSizeRange" min="12" max="24" value="15">
+        <div class="slider-labels"><span>SMALL</span><span>MEDIUM</span><span>LARGE</span></div>
+        <div class="ctrl-label" style="margin-top:16px">Font Color</div>
+        <div class="color-swatches" id="fontColorSwatches">
+          <div class="swatch sel" data-color="#fff" style="background:#fff;border:2px solid #e2e8f0"></div>
+          <div class="swatch" data-color="#facc15" style="background:#facc15"></div>
+          <div class="swatch" data-color="#22c55e" style="background:#22c55e"></div>
+          <div class="swatch" data-color="#06b6d4" style="background:#06b6d4"></div>
+          <div class="swatch" style="background:#f8fafc;border:2px solid #e2e8f0" title="Custom">
+            <span class="material-icons" style="font-size:14px;color:#94a3b8">colorize</span>
+            <input type="color" id="fontColorInput">
+          </div>
+        </div>
+        <div class="ctrl-label" style="margin-top:14px">Background</div>
+        <div class="color-swatches" id="bgColorSwatches">
+          <div class="swatch sel" data-color="rgba(20,20,20,.88)" style="background:#111"></div>
+          <div class="swatch" data-color="rgba(55,65,81,.85)" style="background:#374151"></div>
+          <div class="swatch" data-color="rgba(30,58,95,.85)" style="background:#1e3a5f"></div>
+          <div class="swatch" data-color="transparent" style="background:transparent;border:2px dashed #ccc"></div>
+          <div class="swatch" style="background:#f8fafc;border:2px solid #e2e8f0" title="Custom">
+            <span class="material-icons" style="font-size:14px;color:#94a3b8">colorize</span>
+            <input type="color" id="bgColorInput">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ctrl-label">Position</div>
+        <div class="pos-grid" id="posGrid">
+          <button class="pos-btn sel" data-pos="bottom"><span class="material-icons">align_vertical_bottom</span><span class="pos-label">BOTTOM</span></button>
+          <button class="pos-btn" data-pos="top"><span class="material-icons">align_vertical_top</span><span class="pos-label">TOP</span></button>
+          <button class="pos-btn" data-pos="floating"><span class="material-icons">open_with</span><span class="pos-label">FLOAT</span></button>
+        </div>
+        <div class="hc-card" id="hcCard">
+          <span class="material-icons hc-icon">visibility</span>
+          <div class="hc-text"><div class="hc-title">High Contrast</div><div class="hc-sub">Enhanced visibility</div></div>
+          <div class="toggle-blue" id="hcToggle"></div>
+        </div>
+        <button class="reset-btn" id="capResetBtn"><span class="material-icons" style="font-size:14px">settings_backup_restore</span>Reset</button>
+        <a href="Captions.html" style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--blue);font-weight:700;text-decoration:none;margin-top:12px;">
+          <span class="material-icons" style="font-size:15px">open_in_new</span>Full Settings Page
+        </a>
+      </div>
+    </div>
+    <div class="cap-modal-footer">
+      <button class="btn-cancel" id="capCancelBtn">Cancel</button>
+      <button class="btn-save" id="capSaveBtn">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="globalToast"></div>
+<script src="js/Main.js"></script>
+<script src="js/Meeting.js"></script>
+</body>
+</html>

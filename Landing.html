@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartLingo – Real-Time Multilingual Subtitles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="css/Main.css">
+<link rel="stylesheet" href="css/Landing.css">
+</head>
+<body>
+
+<!--NAVBAR-->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="Landing.html"><img src="SmartLingo Logo.jpeg" alt="SmartLingo"></a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="Trans.html">Transcripts</a>
+      <a href="Captions.html">Captions</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn btn-ghost btn-md" onclick="location.href='Login.html'">Login</button>
+      <button class="btn btn-primary btn-md" onclick="location.href='Login.html'">Get Started Free</button>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-badge">
+    <span class="material-icons" style="font-size:13px">bolt</span>
+    AI-POWERED LIVE TRANSLATION
+  </div>
+  <h1>Real-Time <em>Context-Aware</em><br>Multilingual Subtitles</h1>
+  <p class="hero-desc">Break language barriers in every meeting. SmartLingo delivers 99.9% accurate, idiom-aware translation for global teams — directly in your browser.</p>
+  <div class="hero-btns">
+    <button class="btn-hero-primary btn" onclick="location.href='Login.html'">
+      <span class="material-icons" style="font-size:18px">rocket_launch</span>Get Started Free
+    </button>
+    <button class="btn-hero-outline btn" onclick="location.href='Meeting.html'">
+      <span class="material-icons" style="font-size:18px">videocam</span>Try Live Meeting
+    </button>
+    <button class="btn-hero-outline btn" id="demoBtn">
+      <span class="material-icons" style="font-size:18px">play_circle_outline</span>Watch Demo
+    </button>
+  </div>
+
+  <!--Browser mockup-->
+  <div class="mockup-wrap">
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="url-bar">smartlingo.app/meeting/room-204</div>
+      </div>
+      <div class="meeting-grid" id="meetingGrid" style="padding:0;overflow:hidden">
+        <div style="grid-column:1/-1;grid-row:1/-1;width:100%;height:100%;
+        background:url('Meeting Room.jpg') center/cover no-repeat;
+        min-height:220px;border-radius:12px"></div>
+      </div>
+      <div class="translation-bar">
+        <span class="lang-pill">DE → EN</span>
+        <div class="trans-content">
+          <div class="trans-orig" id="transOrig">"Wir müssen die Projektplanung bis nächste Woche abschließen."</div>
+          <div class="trans-result" id="transResult">"We need to finalize the project planning by next week."</div>
+        </div>
+        <div>
+          <div class="smart-badge"><span class="material-icons" style="font-size:14px">check_circle</span>SmartGlossary Active</div>
+          <div class="smart-sub">Technical terms translated<br>using corporate dictionary.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--FEATURES-->
+<section class="features-section" id="features">
+  <div class="section-header reveal">
+    <h2>Everything you need for global collaboration</h2>
+    <p>Powerful AI features designed to make multilingual communication seamless, accurate, and professional.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal" onclick="location.href='Meeting.html'" style="cursor:pointer">
+      <div class="feat-icon"><span class="material-icons">settings_voice</span></div>
+      <h3>Speech-to-Text</h3>
+      <p>Instant, high-fidelity transcription for over 50 languages with native speaker-level accuracy.</p>
+    </div>
+    <div class="feature-card reveal" 
+         style="transition-delay:.08s; cursor:pointer;" 
+         onclick="location.href='Meeting.html'">
+      <div class="feat-icon"><span class="material-icons">psychology</span></div>
+      <h3>Context-Aware AI</h3>
+      <p>Our AI understands industry-specific jargon, idioms, and cultural nuances for precise translation.</p>
+    </div>
+    <div class="feature-card reveal" 
+         style="transition-delay:.14s; cursor:pointer;"
+         onclick="location.href='Captions.html'">
+      <div class="feat-icon"><span class="material-icons">tune</span></div>
+      <h3>Custom Captions</h3>
+      <p>Full control over font size, color, position, and style. Real-time preview of every change.</p>
+    </div>
+    <div class="feature-card reveal" 
+         style="transition-delay:.2s; cursor:pointer;" 
+         onclick="location.href='Trans.html'">
+      <div class="feat-icon"><span class="material-icons">description</span></div>
+      <h3>Transcript Export</h3>
+      <p>One-click export of bilingual meeting minutes, summaries, and action items in multiple formats.</p>
+    </div>
+    <div class="feature-card reveal" style="transition-delay:.26s">
+      <div class="feat-icon"><span class="material-icons">wifi_off</span></div>
+      <h3>Offline Mode</h3>
+      <p>Privacy-first processing. Run core AI models locally for ultra-low latency and total data security.</p>
+    </div>
+    <div class="feature-card reveal" style="transition-delay:.32s">
+      <div class="feat-icon"><span class="material-icons">model_training</span></div>
+      <h3>Adaptive Learning</h3>
+      <p>The system learns your specific accent and speaking patterns the more you use it.</p>
+    </div>
+  </div>
+</section>
+
+<!--HOW IT WORKS-->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="how-visual reveal">
+      <div class="how-visual-top">
+        <img src="Meeting Room2.jpg" alt="Meeting" style="width:100%;border-radius:12px;object-fit:cover;height:200px">
+      </div>
+      <div class="how-visual-bottom">
+        <div class="glossary-pill"><span class="live-dot"></span>SmartGlossary Active</div>
+        <div class="glossary-sub" style="padding-left:4px">Technical terms being translated using the corporate dictionary.</div>
+      </div>
+    </div>
+    <div class="how-content reveal" style="transition-delay:.15s">
+      <h2>Zero configuration.<br>Connect in seconds.</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><h4>Select Your Languages</h4><p>Choose from 120+ source and target language pairs instantly.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><h4>Join Any Platform</h4><p>Works with Zoom, Teams, Google Meet, or our built-in secure meeting room.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><h4>Speak Naturally</h4><p>AI handles the heavy lifting, providing real-time captions and voice-over translations.</p></div></div>
+      </div>
+      <div class="testimonial-card">
+        <blockquote>"SmartLingo has cut our meeting times in half by eliminating translation delays. It's like everyone speaks the same language."</blockquote>
+        <div class="t-author">
+          <div class="t-av">DC</div>
+          <div><div class="t-name">David Chen</div><div class="t-role">CTO at Globex International</div></div>
+        </div>
+      </div>
+      <button class="btn-hero-primary btn" onclick="location.href='Meeting.html'" style="margin-top:24px">
+        <span class="material-icons" style="font-size:18px">videocam</span>Start Your First Meeting
+      </button>
+    </div>
+  </div>
+</section>
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="SmartLingo Logo.jpeg" alt="SmartLingo">
+        <p>Empowering global communication through cutting-edge neural translation and real-time speech recognition.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Facebook">f</a>
+          <a href="#" class="social-link" title="Twitter">@</a>
+          <a href="#" class="social-link" title="LinkedIn">in</a>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="Landing.html">Home</a>
+          <a href="Login.html">Sign In</a>
+          <a href="Meeting.html">Live Meeting</a>
+          <a href="Trans.html">Transcript</a>
+          <a href="Captions.html">Caption Settings</a>
+        </div>
+        <div class="footer-col">
+          <h4>Features</h4>
+          <a href="#features">Speech-to-Text</a>
+          <a href="Captions.html">Custom Captions</a>
+          <a href="Trans.html">Transcript Export</a>
+          <a href="Meeting.html">Live Translation</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Us</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 SmartLingo AI. Developed in collaboration with Global Tech University Research Lab.</p>
+      <div class="footer-badges">
+        <span class="badge badge-dark">POWERED BY NVIDIA AI</span>
+        <span class="badge badge-outline">ISO 27001 Certified</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!--DEMO MODAL-->
+<div class="modal-overlay" id="demoModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Watch Demo</h3>
+      <button class="modal-close-btn" id="demoModalClose">✕</button>
+    </div>
+    <div class="modal-video-placeholder">
+      <button class="play-circle" onclick="location.href='Meeting.html'">
+        <span class="material-icons">play_arrow</span>
+      </button>
+    </div>
+    <p class="modal-footer-note">Click play to jump into a live demo meeting →</p>
+    <button class="btn btn-primary btn-md" style="width:100%;margin-top:14px;padding:14px" onclick="location.href='Meeting.html'">
+      <span class="material-icons" style="font-size:17px">videocam</span> Try Live Meeting
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="globalToast"></div>
+<script src="js/Main.js"></script>
+<script src="js/Landing.js"></script>
+</body>
+</html>
