@@ -1,23 +1,52 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- DATA ---- */
-  const ALL_ROWS = [
-    { ts:'00:00:12', spk:'John Doe', initials:'JD', color:'#2563eb', en:'Good morning everyone. Thank you for joining today\'s Q3 review. We\'ve seen some significant growth in our European markets.', es:'Buenos días a todos. Gracias por unirse a la revisión del tercer trimestre. Hemos visto un crecimiento significativo en nuestros mercados europeos.' },
-    { ts:'00:01:45', spk:'Mark Smith', initials:'MS', color:'#a855f7', en:'Regarding the subscription model, should we consider a localized pricing strategy for the Nordic regions to capitalize on this momentum?', es:'En relación con el modelo de suscripción, ¿deberíamos considerar una estrategia de precios localizada para las regiones nórdicas para capitalizar este impulso?' },
-    { ts:'00:03:22', spk:'John Doe', initials:'JD', color:'#2563eb', en:'That\'s a great point Mark. Our data shows that purchasing power varies significantly across the Nordics, so a tiered localized approach makes sense.', es:'Ese es un gran punto, Mark. Nuestros datos muestran que el poder adquisitivo varía significativamente en los países nórdicos, por lo que un enfoque localizado por niveles tiene sentido.' },
-    { ts:'00:05:10', spk:'Alice Lewis', initials:'AL', color:'#f97316', en:'I can prepare a competitive analysis for those regions by Friday. We\'ll need to look at local competitors who are already using localized billing.', es:'Puedo preparar un análisis competitivo para esas regiones para el viernes. Tendremos que fijarnos en los competidores locales que ya utilizan facturación localizada.' },
-    { ts:'00:08:34', spk:'Robert Kim', initials:'RK', color:'#22c55e', en:'Just to add, we\'ve also seen a 20% increase in engagement when we provide customer support in the local language. SmartLingo has been vital for this.', es:'Solo para añadir, también hemos visto un aumento del 20% en el compromiso cuando ofrecemos atención al cliente en el idioma local. SmartLingo ha sido vital para esto.' },
-    { ts:'00:11:02', spk:'Mark Smith', initials:'MS', color:'#a855f7', en:'That\'s impressive data Robert. Should we look at expanding this to Asian markets next quarter as well?', es:'Esos son datos impresionantes, Robert. ¿Deberíamos considerar expandir esto a los mercados asiáticos el próximo trimestre también?' },
-    { ts:'00:13:45', spk:'John Doe', initials:'JD', color:'#2563eb', en:'Absolutely. Let\'s include Asia-Pacific in Alice\'s analysis scope. The opportunity there is significant given our recent product launches.', es:'Absolutamente. Incluyamos Asia-Pacífico en el alcance del análisis de Alice. La oportunidad allí es significativa dado nuestros lanzamientos de productos recientes.' },
-    { ts:'00:15:20', spk:'Alice Lewis', initials:'AL', color:'#f97316', en:'I\'ll expand the report to cover APAC markets too. We should have preliminary findings by the following Monday.', es:'Ampliaré el informe para cubrir también los mercados de APAC. Deberíamos tener resultados preliminares para el lunes siguiente.' },
-    { ts:'00:18:11', spk:'Robert Kim', initials:'RK', color:'#22c55e', en:'One concern – our infrastructure needs to support 24/7 multilingual support across time zones. Have we assessed the technical requirements?', es:'Una preocupación: nuestra infraestructura necesita soportar soporte multilingüe 24/7 en diferentes zonas horarias. ¿Hemos evaluado los requisitos técnicos?' },
-    { ts:'00:21:30', spk:'Mark Smith', initials:'MS', color:'#a855f7', en:'Engineering has already started scoping this out. We expect a full requirements document by end of this month.', es:'El equipo de ingeniería ya ha comenzado a definir el alcance de esto. Esperamos un documento de requisitos completo para finales de este mes.' },
-  ];
+  let ALL_ROWS = [];
+  const MEETING_ID = localStorage.getItem('meetingID') || '1'; // default to 1 for demo
+
+  async function loadTranscript(meetingId) {
+    try {
+      const resp = await fetch(`http://localhost:3000/meetings/${meetingId}/captions`);
+      const rows = await resp.json();
+      ALL_ROWS = rows.map(r => ({
+        ts: r.timestamp || '',
+        spk: r.speaker || '',
+        initials: r.speaker ? r.speaker.split(' ').map(n=>n[0]).join('') : '',
+        color:['#2563eb','#7c3aed','#db2777','#059669'][Math.floor(Math.random()*5)],
+        en: r.text || '',
+        es: ''
+      }));
+      renderTable();
+    } catch (e) {
+      console.warn('failed to load transcript', e);
+    }
+  }
+// default to 1 for demo
+  loadTranscript(MEETING_ID);
+
 
   const PAGE_SIZE = 5;
   let currentPage = 1;
   let searchTerm = '';
+
+  /* attempt to load translations from backend for caption id 1 */
+  /* fetch translations for first caption as demo */
+  (async () => {
+    try {
+      const resp = await fetch(`http://localhost:3000/captions/${MEETING_ID}/translations`);
+      if (resp.ok) {
+        const trans = await resp.json();
+        if (trans.length) {
+          ALL_ROWS = ALL_ROWS.concat(trans.map(t => ({
+            ts: '', spk:'', initials:'', color:'#000', en:'', es:t.text
+          })));
+          renderTable();
+        }
+      }
+    } catch (e) {
+      console.warn('translation fetch error', e);
+    }
+  })();
 
   /* ---- SEARCH ---- */
   function filteredRows() {

@@ -12,211 +12,179 @@
 </head>
 <body class="captions-page">
 
-<!--TOPBAR-->
-<div class="cap-topbar shared-topbar">
-  <img src="SmartLingo Logo.jpeg" alt="SmartLingo" onclick="location.href='Landing.html'">
-  <div class="topbar-sep"></div>
-  <span class="topbar-page-title">Caption Settings</span>
-
-
-  <div id="topbarNav"></div>
-
-  <div style="display:flex;gap:8px;align-items:center">
-    <a href="Meeting.html" style="text-decoration:none">
-      <button class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:5px">
-        <span class="material-icons" style="font-size:15px">arrow_back</span>Back to Meeting
-      </button>
-    </a>
-    <a href="Trans.html" style="text-decoration:none">
-      <button class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:5px">
-        <span class="material-icons" style="font-size:15px">description</span>Transcript
-      </button>
-    </a>
-  </div>
-</div>
-
-
-<div class="cap-breadcrumb">
-  <a href="Landing.html">Home</a>
-  <span class="material-icons">chevron_right</span>
-  <a href="Meeting.html">Live Meeting</a>
-  <span class="material-icons">chevron_right</span>
-  <span>Caption Settings</span>
-</div>
-
-<!--PAGE CONTENT-->
-<div class="cap-page-inner">
-
-  <div class="cap-page-header reveal">
-    <h1>Caption Settings</h1>
-    <p>Customise how real-time subtitles appear during your meetings. Changes are previewed live on the right.</p>
-  </div>
-
-  <div class="cap-grid">
-
-    <!--SETTINGS PANEL-->
-    <div class="settings-panel">
-
+<!-- NAV -->
+<header class="sl-nav">
+  <a href="Landing.html" class="sl-nav-brand">
+    <img src="SmartLingo Logo.jpeg" alt="SmartLingo" class="sl-nav-logo">
+    <span class="sl-nav-name">SmartLingo</span>
+  </a>
+  <nav class="sl-nav-links">
+    <a href="Landing.html">Home</a>
+    <a href="Meeting.html">Meeting</a>
+    <a href="Captions.html" class="active">Captions</a>
+    <a href="Trans.html">Transcripts</a>
+  </nav>
   
-      <div class="settings-section">
-        <div class="settings-section-title"><span class="material-icons">text_fields</span>Font & Style</div>
-        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:10px">Font Size</label>
-        <div class="font-size-row">
-          <span style="font-size:12px;font-weight:700;color:#94a3b8">Aa</span>
-          <input type="range" id="fontSizeSlider" min="12" max="28" value="18" style="flex:1">
-          <span style="font-size:18px;font-weight:700;color:#94a3b8">Aa</span>
-          <span class="size-preview" id="sizePreview">18px</span>
-        </div>
-        <div class="font-size-labels"><span>SMALL</span><span>MEDIUM</span><span>LARGE</span></div>
-        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin:18px 0 10px">Style</label>
-        <div class="style-btns">
-          <button class="style-btn" id="boldBtn" style="font-weight:900">B</button>
-          <button class="style-btn" id="italicBtn" style="font-style:italic">I</button>
-          <button class="style-btn" id="shadowBtn">Shadow</button>
-          <button class="style-btn" id="outlineBtn">Outline</button>
-        </div>
-        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin:18px 0 10px">Font Color</label>
-        <div class="swatch-row" id="fontColorGroup">
-          <div class="color-swatch sel" data-color="#ffffff" style="background:#fff;border:2px solid #e2e8f0"></div>
-          <div class="color-swatch" data-color="#facc15" style="background:#facc15"></div>
-          <div class="color-swatch" data-color="#22c55e" style="background:#22c55e"></div>
-          <div class="color-swatch" data-color="#06b6d4" style="background:#06b6d4"></div>
-          <div class="color-swatch" data-color="#f97316" style="background:#f97316"></div>
-          <div class="color-swatch" data-color="#e879f9" style="background:#e879f9"></div>
-          <div class="color-swatch" style="background:#f8fafc;border:2px solid #e2e8f0" title="Custom">
-            <span class="material-icons" style="font-size:15px;color:#94a3b8;pointer-events:none">colorize</span>
-            <input type="color" id="fontColorCustomInput" value="#ffffff">
-          </div>
-        </div>
-      </div>
+  <div class="sl-nav-right">
+    <a href="Login.html" class="sl-nav-signin">Sign in</a>
+    <a href="Login.html" class="sl-nav-start">Start free</a>
+  </div>
+</header>
 
-      <!--BACKGROUND-->
-      <div class="settings-section">
-        <div class="settings-section-title"><span class="material-icons">crop_free</span>Background</div>
-        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin-bottom:10px">Color</label>
-        <div class="swatch-row" id="bgColorGroup">
-          <div class="color-swatch sel" data-color="rgba(15,15,15,0.88)" style="background:#0f0f0f"></div>
-          <div class="color-swatch" data-color="rgba(55,65,81,0.88)" style="background:#374151"></div>
-          <div class="color-swatch" data-color="rgba(30,58,138,0.88)" style="background:#1e3a8a"></div>
-          <div class="color-swatch" data-color="rgba(88,28,135,0.88)" style="background:#581c87"></div>
-          <div class="color-swatch" data-color="transparent" style="background:transparent;border:2px dashed #cbd5e1"></div>
-          <div class="color-swatch" style="background:#f8fafc;border:2px solid #e2e8f0" title="Custom">
-            <span class="material-icons" style="font-size:15px;color:#94a3b8;pointer-events:none">colorize</span>
-            <input type="color" id="bgColorCustomInput" value="#0f0f0f">
-          </div>
-        </div>
-        <label style="font-size:13px;font-weight:600;color:#374151;display:block;margin:16px 0 6px">Opacity</label>
-        <div class="opacity-row">
-          <span style="font-size:12px;color:#94a3b8;font-weight:700">0%</span>
-          <input type="range" id="bgOpacitySlider" min="0" max="100" value="88" style="flex:1">
-          <span style="font-size:12px;color:#94a3b8;font-weight:700">100%</span>
-          <span class="opacity-val" id="opacityVal">88%</span>
-        </div>
-      </div>
+<!-- MAIN LAYOUT -->
+<div class="cap-main">
 
-    
-      <div class="settings-section">
-        <div class="settings-section-title"><span class="material-icons">vertical_align_bottom</span>Subtitle Position</div>
-        <div class="position-grid">
-          <button class="position-btn sel" data-pos="bottom"><span class="material-icons">align_vertical_bottom</span><span class="position-label">BOTTOM</span></button>
-          <button class="position-btn" data-pos="top"><span class="material-icons">align_vertical_top</span><span class="position-label">TOP</span></button>
-          <button class="position-btn" data-pos="floating"><span class="material-icons">open_with</span><span class="position-label">FLOATING</span></button>
-        </div>
-      </div>
-
-
-      <div class="settings-section">
-        <div class="settings-section-title"><span class="material-icons">tune</span>Behaviour</div>
-        <div class="toggle-row" id="toggleHighContrast" data-state-key="highContrast">
-          <div class="toggle-info"><div class="toggle-title">High Contrast Mode</div><div class="toggle-sub">Black background with yellow text for maximum legibility</div></div>
-          <div class="toggle-switch off"></div>
-        </div>
-        <div class="toggle-row" id="toggleSpeakerLabels" data-state-key="speakerLabels">
-          <div class="toggle-info"><div class="toggle-title">Speaker Labels</div><div class="toggle-sub">Show the speaker's name above each subtitle line</div></div>
-          <div class="toggle-switch"></div>
-        </div>
-        <div class="toggle-row" id="toggleOrigText" data-state-key="originalText">
-          <div class="toggle-info"><div class="toggle-title">Show Original Text</div><div class="toggle-sub">Display original speech above the translated subtitle</div></div>
-          <div class="toggle-switch"></div>
-        </div>
-        <div class="toggle-row" id="toggleAutoScroll" data-state-key="autoScroll">
-          <div class="toggle-info"><div class="toggle-title">Auto-Scroll Transcript</div><div class="toggle-sub">Automatically follow new lines as they appear</div></div>
-          <div class="toggle-switch"></div>
-        </div>
-        <div class="toggle-row" id="toggleWordByWord" data-state-key="wordByWord">
-          <div class="toggle-info"><div class="toggle-title">Word-by-Word Reveal</div><div class="toggle-sub">Animate each word as it is recognised in real time</div></div>
-          <div class="toggle-switch off"></div>
-        </div>
-      </div>
-
+  <!-- LEFT: DARK PREVIEW -->
+  <div class="cap-preview-left">
+    <div class="cap-preview-header">
+      <div class="cap-preview-label">CAPTIONS</div>
+      <h2 class="cap-preview-title">Make captions yours.</h2>
+      <p class="cap-preview-sub">Tune readability so subtitles work for your eyes, your screen, and your audience.</p>
     </div>
-
-    
-    <div class="preview-panel">
-
-      <div class="preview-card reveal">
-        <div class="preview-card-header">
-          <h3>Live Preview</h3>
-          <div class="preview-live-badge"><div class="preview-dot"></div>UPDATING</div>
-        </div>
-        <div class="subtitle-screen">
-          <div class="screen-tiles">
-            <div class="screen-tile active-tile"><div class="tile-av">JD</div><span class="tile-name">Jane D.</span></div>
-            <div class="screen-tile"><div class="tile-av">MS</div><span class="tile-name">Mark S.</span></div>
-            <div class="screen-tile"><div class="tile-av">AL</div><span class="tile-name">Alice L.</span></div>
-          </div>
-          <div class="live-subtitle" id="liveSubtitle" style="background:rgba(15,15,15,0.88)">
-            <p id="liveSubtitleText" style="color:#fff;font-size:18px">"We need to finalize the project planning by next week."</p>
-          </div>
-        </div>
+    <div class="subtitle-screen">
+      <div class="screen-tiles">
+        <div class="screen-tile active-tile"><div class="tile-av">JD</div><span class="tile-name">Jane D.</span></div>
+        <div class="screen-tile"><div class="tile-av">MS</div><span class="tile-name">Mark S.</span></div>
+        <div class="screen-tile"><div class="tile-av">AL</div><span class="tile-name">Alice L.</span></div>
       </div>
-
-      <div class="shortcuts-card reveal" style="transition-delay:.1s">
-        <h3><span class="material-icons">keyboard</span>Keyboard Shortcuts</h3>
-        <div class="shortcut-row"><span class="shortcut-desc">Save settings</span><div class="shortcut-keys"><span class="key">⌘</span><span class="key">S</span></div></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Reset to defaults</span><div class="shortcut-keys"><span class="key">⌘</span><span class="key">Z</span></div></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Toggle subtitles</span><div class="shortcut-keys"><span class="key">Alt</span><span class="key">C</span></div></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Increase font size</span><div class="shortcut-keys"><span class="key">⌘</span><span class="key">+</span></div></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Decrease font size</span><div class="shortcut-keys"><span class="key">⌘</span><span class="key">−</span></div></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Switch position</span><div class="shortcut-keys"><span class="key">Alt</span><span class="key">P</span></div></div>
+      <div class="live-subtitle" id="liveSubtitle" style="background:rgba(15,15,15,0.88)">
+        <p id="liveSubtitleText" style="color:#fff;font-size:26px">"The quick brown fox jumps over the lazy dog."</p>
       </div>
-
-  
-      <div class="shortcuts-card reveal" style="transition-delay:.18s">
-        <h3><span class="material-icons">link</span>Quick Navigation</h3>
-        <a href="Meeting.html" style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-light);text-decoration:none;color:var(--dark);transition:.2s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--dark)'">
-          <span class="material-icons" style="font-size:18px;color:#94a3b8">videocam</span>
-          <span style="font-size:13px;font-weight:500">Live Meeting Dashboard</span>
-          <span class="material-icons" style="margin-left:auto;font-size:15px;color:#94a3b8">chevron_right</span>
-        </a>
-        <a href="Trans.html" style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-light);text-decoration:none;color:var(--dark);transition:.2s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--dark)'">
-          <span class="material-icons" style="font-size:18px;color:#94a3b8">description</span>
-          <span style="font-size:13px;font-weight:500">Transcript Viewer</span>
-          <span class="material-icons" style="margin-left:auto;font-size:15px;color:#94a3b8">chevron_right</span>
-        </a>
-        <a href="Login.html" style="display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-light);text-decoration:none;color:var(--dark);transition:.2s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--dark)'">
-          <span class="material-icons" style="font-size:18px;color:#94a3b8">login</span>
-          <span style="font-size:13px;font-weight:500">Sign In</span>
-          <span class="material-icons" style="margin-left:auto;font-size:15px;color:#94a3b8">chevron_right</span>
-        </a>
-        <a href="Landing.html" style="display:flex;align-items:center;gap:9px;padding:9px 0;text-decoration:none;color:var(--dark);transition:.2s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--dark)'">
-          <span class="material-icons" style="font-size:18px;color:#94a3b8">home</span>
-          <span style="font-size:13px;font-weight:500">Back to Home</span>
-          <span class="material-icons" style="margin-left:auto;font-size:15px;color:#94a3b8">chevron_right</span>
-        </a>
-      </div>
-
     </div>
   </div>
-</div>
 
-<div class="cap-action-bar">
-  <button class="reset-default-btn" id="resetDefaultBtn">
-    <span class="material-icons" style="font-size:16px">settings_backup_restore</span>Reset to Defaults
-  </button>
-  <div class="spacer"></div>
-  <a href="Meeting.html"><button class="btn-cancel-cap" id="cancelCapBtn">Cancel</button></a>
-  <button class="btn-save-cap" id="saveCapBtn">Save Settings</button>
+  <!-- RIGHT: SETTINGS -->
+  <div class="cap-settings-right">
+
+    <!-- PRESETS -->
+    <div class="settings-section">
+      <div class="section-label">PRESETS</div>
+      <div class="presets-row">
+        <button class="preset-btn" data-preset="cinema">Cinema</button>
+        <button class="preset-btn" data-preset="soft">Soft</button>
+        <button class="preset-btn" data-preset="brand">Brand</button>
+        <button class="preset-btn" data-preset="large">Large</button>
+      </div>
+    </div>
+
+    <!-- FONT + POSITION -->
+    <div class="settings-section">
+      <div class="two-col">
+        <div>
+          <label class="field-label">Font</label>
+          <select class="sl-select" id="fontSelect">
+            <option>Manrope</option>
+            <option>Sora</option>
+            <option>DM Sans</option>
+            <option>Inter</option>
+            <option>Georgia</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Position</label>
+          <select class="sl-select" id="positionSelect">
+            <option value="bottom">Bottom</option>
+            <option value="top">Top</option>
+            <option value="floating">Floating</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDERS -->
+    <div class="settings-section">
+      <div class="slider-row">
+        <label class="field-label">Font size</label>
+        <span class="field-val" id="sizePreview">26px</span>
+      </div>
+      <input type="range" id="fontSizeSlider" min="12" max="40" value="26" class="sl-range">
+
+      <div class="slider-row" style="margin-top:20px">
+        <label class="field-label">Max width</label>
+        <span class="field-val" id="maxWidthVal">98%</span>
+      </div>
+      <input type="range" id="maxWidthSlider" min="30" max="100" value="98" class="sl-range">
+
+      <div class="slider-row" style="margin-top:20px">
+        <label class="field-label">Letter spacing</label>
+        <span class="field-val" id="letterSpacingVal">0px</span>
+      </div>
+      <input type="range" id="letterSpacingSlider" min="-2" max="8" value="0" class="sl-range">
+    </div>
+
+    <!-- COLORS -->
+    <div class="settings-section">
+      <div class="two-col">
+        <div>
+          <label class="field-label">Text color</label>
+          <label class="color-picker-label">
+            <div class="color-preview-block" id="textColorPreview" style="background: #D96B6B"></div>
+            <input type="color" id="fontColorCustomInput" value="#D96B6B">
+          </label>
+        </div>
+        <div>
+          <label class="field-label">Background</label>
+          <label class="color-picker-label">
+            <div class="color-preview-block" id="bgColorPreview" style="background:#8B0000"></div>
+            <input type="color" id="bgColorCustomInput" value="#8B0000">
+          </label>
+        </div>
+      </div>
+
+      <label class="field-label" style="margin-top:16px">Background opacity <span class="field-val" id="opacityVal">88%</span></label>
+      <input type="range" id="bgOpacitySlider" min="0" max="100" value="88" class="sl-range">
+
+      <!-- Hidden swatches for JS compatibility -->
+      <div class="swatch-row" id="fontColorGroup" style="display:none">
+        <div class="color-swatch sel" data-color="#ffffff" style="background:#fff"></div>
+        <div class="color-swatch" data-color="#facc15" style="background:#facc15"></div>
+        <div class="color-swatch" data-color="#22c55e" style="background:#22c55e"></div>
+        <div class="color-swatch" data-color="#06b6d4" style="background:#06b6d4"></div>
+        <div class="color-swatch" data-color="#f97316" style="background:#f97316"></div>
+        <div class="color-swatch" data-color="#e879f9" style="background:#e879f9"></div>
+      </div>
+      <div class="swatch-row" id="bgColorGroup" style="display:none">
+        <div class="color-swatch sel" data-color="rgba(15,15,15,0.88)" style="background:#0f0f0f"></div>
+        <div class="color-swatch" data-color="rgba(55,65,81,0.88)" style="background:#374151"></div>
+        <div class="color-swatch" data-color="rgba(30,58,138,0.88)" style="background:#1e3a8a"></div>
+        <div class="color-swatch" data-color="rgba(88,28,135,0.88)" style="background:#581c87"></div>
+        <div class="color-swatch" data-color="transparent" style="background:transparent"></div>
+      </div>
+    </div>
+
+    <!-- TOGGLES -->
+    <div class="settings-section">
+      <div class="toggle-row" id="toggleHighContrast" data-state-key="highContrast">
+        <div class="toggle-info"><div class="toggle-title">High Contrast Mode</div><div class="toggle-sub">Black background with yellow text</div></div>
+        <div class="toggle-switch off"></div>
+      </div>
+      <div class="toggle-row" id="toggleSpeakerLabels" data-state-key="speakerLabels">
+        <div class="toggle-info"><div class="toggle-title">Speaker Labels</div><div class="toggle-sub">Show speaker name above each subtitle</div></div>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="toggle-row" id="toggleOrigText" data-state-key="originalText">
+        <div class="toggle-info"><div class="toggle-title">Show Original Text</div><div class="toggle-sub">Display original speech above translation</div></div>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="toggle-row" id="toggleAutoScroll" data-state-key="autoScroll">
+        <div class="toggle-info"><div class="toggle-title">Auto-Scroll Transcript</div><div class="toggle-sub">Follow new lines automatically</div></div>
+        <div class="toggle-switch"></div>
+      </div>
+      <div class="toggle-row" id="toggleWordByWord" data-state-key="wordByWord">
+        <div class="toggle-info"><div class="toggle-title">Word-by-Word Reveal</div><div class="toggle-sub">Animate each word as recognised</div></div>
+        <div class="toggle-switch off"></div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="settings-section">
+      <div class="action-btns-row">
+        <button class="btn-reset" id="resetDefaultBtn">Reset</button>
+        <button class="btn-save-cap" id="saveCapBtn">Save</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <div class="toast" id="globalToast"></div>

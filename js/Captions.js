@@ -1,41 +1,49 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
 
- 
   const state = {
-    fontSize: 18,
-    fontColor: '#ffffff',
-    bgColor: 'rgba(15,15,15,0.88)',
-    bgOpacity: 88,
-    position: 'bottom',
-    bold: false,
-    italic: false,
-    shadow: true,
-    outline: false,
+    fontSize:      26,
+    maxWidth:      98,
+    letterSpacing: 0,
+    fontColor:     '#D96B6B',
+    bgColor:       '#8B0000',
+    bgOpacity:     88,
+    position:      'bottom',
+    font:          'Manrope',
     speakerLabels: true,
-    originalText: true,
-    highContrast: false,
-    autoScroll: true,
-    wordByWord: false,
+    originalText:  true,
+    highContrast:  false,
+    autoScroll:    true,
+    wordByWord:    false,
   };
 
   const DEFAULTS = { ...state };
 
-  /* ─────────────────────────────────────
-     PREVIEW SUBTITLE TEXT
-  ───────────────────────────────────── */
+  /* --- ELEMENTS --- */
+  const liveSubtitle     = document.getElementById('liveSubtitle');
+  const liveSubtitleText = document.getElementById('liveSubtitleText');
+  const sizePreview      = document.getElementById('sizePreview');
+  const maxWidthVal      = document.getElementById('maxWidthVal');
+  const letterSpacingVal = document.getElementById('letterSpacingVal');
+  const opacityVal       = document.getElementById('opacityVal');
+  const fontSlider       = document.getElementById('fontSizeSlider');
+  const maxWidthSlider   = document.getElementById('maxWidthSlider');
+  const letterSlider     = document.getElementById('letterSpacingSlider');
+  const opacitySlider    = document.getElementById('bgOpacitySlider');
+  const fontSelect       = document.getElementById('fontSelect');
+  const positionSelect   = document.getElementById('positionSelect');
+  const textColorPreview = document.getElementById('textColorPreview');
+  const bgColorPreview   = document.getElementById('bgColorPreview');
+
+  /* --- CYCLING SUBTITLE TEXT --- */
   const subtitleLines = [
+    '"The quick brown fox jumps over the lazy dog."',
     '"We need to finalize the project planning by next week."',
-    '"The throughput metrics look very promising."',
     '"スケーラビリティのニーズを考慮するとなおさらです。"',
     '"Can we revisit the load balancer configuration?"',
   ];
   let lineIdx = 0;
-  const liveSubtitle = document.getElementById('liveSubtitle');
-  const liveSubtitleText = document.getElementById('liveSubtitleText');
 
-  function cycleSubtitle() {
+  setInterval(() => {
     if (!liveSubtitleText) return;
     liveSubtitleText.style.opacity = '0';
     setTimeout(() => {
@@ -44,155 +52,158 @@ document.addEventListener('DOMContentLoaded', () => {
       liveSubtitleText.style.transition = 'opacity 0.5s';
       liveSubtitleText.style.opacity = '1';
     }, 400);
-  }
-  setInterval(cycleSubtitle, 3500);
+  }, 3500);
 
-  /* ─────────────────────────────────────
-     APPLY STATE TO PREVIEW
-  ───────────────────────────────────── */
+  /* --- APPLY STATE TO PREVIEW --- */
   function applyPreview() {
     if (!liveSubtitle || !liveSubtitleText) return;
-
-    // Background
-    const [r, g, b] = hexToRgb(state.fontColor === '#ffffff' ? state.bgColor : state.bgColor);
-    liveSubtitle.style.background = state.bgColor === 'transparent'
-      ? 'transparent'
-      : `rgba(${r},${g},${b},${state.bgOpacity / 100})`;
-
-    // Text style
-    liveSubtitleText.style.color = state.fontColor;
-    liveSubtitleText.style.fontSize = state.fontSize + 'px';
-    liveSubtitleText.style.fontWeight = state.bold ? '800' : '700';
-    liveSubtitleText.style.fontStyle  = state.italic ? 'italic' : 'normal';
-    liveSubtitleText.style.textShadow = state.shadow
-      ? '0 2px 8px rgba(0,0,0,0.7)'
-      : state.highContrast ? '0 0 0 2px #000, 0 0 0 4px #000' : 'none';
-    liveSubtitleText.style.webkitTextStroke = state.outline ? '1px rgba(0,0,0,0.8)' : '';
 
     // High contrast override
     if (state.highContrast) {
       liveSubtitle.style.background = '#000';
       liveSubtitleText.style.color = '#ffff00';
+    } else {
+      // Apply bg color with opacity
+      const bg = state.bgColor;
+      if (bg === 'transparent') {
+        liveSubtitle.style.background = 'transparent';
+      } else {
+        // Convert hex to rgba with opacity
+        const hex = bg.replace('#', '');
+        if (hex.length === 6) {
+          const r = parseInt(hex.substring(0,2), 16);
+          const g = parseInt(hex.substring(2,4), 16);
+          const b = parseInt(hex.substring(4,6), 16);
+          liveSubtitle.style.background = `rgba(${r},${g},${b},${state.bgOpacity/100})`;
+        } else {
+          liveSubtitle.style.background = bg;
+        }
+      }
+      liveSubtitleText.style.color = state.fontColor;
     }
+
+    // Font
+    liveSubtitleText.style.fontSize      = state.fontSize + 'px';
+    liveSubtitleText.style.fontFamily    = `'${state.font}', sans-serif`;
+    liveSubtitleText.style.letterSpacing = state.letterSpacing + 'px';
+    liveSubtitleText.style.maxWidth      = state.maxWidth + '%';
 
     // Position
     liveSubtitle.className = 'live-subtitle';
-    if (state.position === 'top') liveSubtitle.classList.add('pos-top');
+    if (state.position === 'top')      liveSubtitle.classList.add('pos-top');
     if (state.position === 'floating') liveSubtitle.classList.add('pos-floating');
 
-    // Font size indicator
-    const sizePreview = document.getElementById('sizePreview');
-    if (sizePreview) {
-      sizePreview.textContent = state.fontSize + 'px';
-      sizePreview.style.fontSize = Math.min(state.fontSize, 22) + 'px';
-    }
+    // Update display values
+    if (sizePreview)      sizePreview.textContent      = state.fontSize + 'px';
+    if (maxWidthVal)      maxWidthVal.textContent      = state.maxWidth + '%';
+    if (letterSpacingVal) letterSpacingVal.textContent = state.letterSpacing + 'px';
+    if (opacityVal)       opacityVal.textContent       = state.bgOpacity + '%';
 
-    // Opacity indicator
-    const opacityVal = document.getElementById('opacityVal');
-    if (opacityVal) opacityVal.textContent = state.bgOpacity + '%';
+    // Update color previews
+    if (textColorPreview) textColorPreview.style.background = state.fontColor;
+    if (bgColorPreview)   bgColorPreview.style.background   = state.bgColor;
   }
 
-  function hexToRgb(input) {
-    // Handles rgba(...) strings and hex
-    const m = input.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-    if (m) return [+m[1], +m[2], +m[3]];
-    const hex = input.replace('#', '');
-    return [
-      parseInt(hex.substring(0,2), 16),
-      parseInt(hex.substring(2,4), 16),
-      parseInt(hex.substring(4,6), 16),
-    ];
-  }
-
-  /* ─────────────────────────────────────
-     FONT SIZE SLIDER
-  ───────────────────────────────────── */
-  const fontSlider = document.getElementById('fontSizeSlider');
+  /* --- FONT SIZE SLIDER --- */
   fontSlider?.addEventListener('input', () => {
     state.fontSize = +fontSlider.value;
     applyPreview();
   });
 
-  /* ─────────────────────────────────────
-     FONT STYLE BUTTONS
-  ───────────────────────────────────── */
-  document.getElementById('boldBtn')?.addEventListener('click', function() {
-    state.bold = !state.bold;
-    this.classList.toggle('active', state.bold);
-    applyPreview();
-  });
-  document.getElementById('italicBtn')?.addEventListener('click', function() {
-    state.italic = !state.italic;
-    this.classList.toggle('active', state.italic);
-    applyPreview();
-  });
-  document.getElementById('shadowBtn')?.addEventListener('click', function() {
-    state.shadow = !state.shadow;
-    this.classList.toggle('active', state.shadow);
-    applyPreview();
-  });
-  document.getElementById('outlineBtn')?.addEventListener('click', function() {
-    state.outline = !state.outline;
-    this.classList.toggle('active', state.outline);
+  /* --- MAX WIDTH SLIDER --- */
+  maxWidthSlider?.addEventListener('input', () => {
+    state.maxWidth = +maxWidthSlider.value;
     applyPreview();
   });
 
-  /* ─────────────────────────────────────
-     FONT COLOR SWATCHES
-  ───────────────────────────────────── */
-  document.querySelectorAll('#fontColorGroup .color-swatch[data-color]').forEach(sw => {
-    sw.addEventListener('click', () => {
-      document.querySelectorAll('#fontColorGroup .color-swatch').forEach(s => s.classList.remove('sel'));
-      sw.classList.add('sel');
-      state.fontColor = sw.dataset.color;
-      applyPreview();
-    });
-  });
-  document.getElementById('fontColorCustomInput')?.addEventListener('input', e => {
-    state.fontColor = e.target.value;
+  /* --- LETTER SPACING SLIDER --- */
+  letterSlider?.addEventListener('input', () => {
+    state.letterSpacing = +letterSlider.value;
     applyPreview();
   });
 
-  /* ─────────────────────────────────────
-     BG COLOR SWATCHES
-  ───────────────────────────────────── */
-  document.querySelectorAll('#bgColorGroup .color-swatch[data-color]').forEach(sw => {
-    sw.addEventListener('click', () => {
-      document.querySelectorAll('#bgColorGroup .color-swatch').forEach(s => s.classList.remove('sel'));
-      sw.classList.add('sel');
-      state.bgColor = sw.dataset.color;
-      applyPreview();
-    });
-  });
-  document.getElementById('bgColorCustomInput')?.addEventListener('input', e => {
-    state.bgColor = e.target.value;
-    applyPreview();
-  });
-
-  /* ─────────────────────────────────────
-     BACKGROUND OPACITY SLIDER
-  ───────────────────────────────────── */
-  const opacitySlider = document.getElementById('bgOpacitySlider');
+  /* --- OPACITY SLIDER --- */
   opacitySlider?.addEventListener('input', () => {
     state.bgOpacity = +opacitySlider.value;
     applyPreview();
   });
 
-  /* ─────────────────────────────────────
-     SUBTITLE POSITION
-  ───────────────────────────────────── */
-  document.querySelectorAll('.position-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.position-btn').forEach(b => b.classList.remove('sel'));
-      btn.classList.add('sel');
-      state.position = btn.dataset.pos;
+  /* --- FONT SELECT --- */
+  fontSelect?.addEventListener('change', () => {
+    state.font = fontSelect.value;
+    applyPreview();
+  });
+
+  /* --- POSITION SELECT --- */
+  positionSelect?.addEventListener('change', () => {
+    state.position = positionSelect.value;
+    applyPreview();
+  });
+
+  /* --- FONT COLOR PICKER --- */
+  document.getElementById('fontColorCustomInput')?.addEventListener('input', e => {
+  state.fontColor = e.target.value;
+  if (textColorPreview) textColorPreview.style.background = state.fontColor;
+  applyPreview();
+});
+
+  /* --- BG COLOR PICKER --- */
+  document.getElementById('bgColorCustomInput')?.addEventListener('input', e => {
+  state.bgColor = e.target.value;
+  if (bgColorPreview) bgColorPreview.style.background = state.bgColor;
+  applyPreview();
+});
+
+  /* --- FONT COLOR SWATCHES (hidden but kept for JS) --- */
+  document.querySelectorAll('#fontColorGroup .color-swatch[data-color]').forEach(sw => {
+    sw.addEventListener('click', () => {
+      document.querySelectorAll('#fontColorGroup .color-swatch').forEach(s => s.classList.remove('sel'));
+      sw.classList.add('sel');
+      state.fontColor = sw.dataset.color;
+      if (textColorPreview) textColorPreview.style.background = state.fontColor;
       applyPreview();
     });
   });
 
-  /* ─────────────────────────────────────
-     TOGGLE ROWS
-  ───────────────────────────────────── */
+  /* --- BG COLOR SWATCHES (hidden but kept for JS) --- */
+  document.querySelectorAll('#bgColorGroup .color-swatch[data-color]').forEach(sw => {
+    sw.addEventListener('click', () => {
+      document.querySelectorAll('#bgColorGroup .color-swatch').forEach(s => s.classList.remove('sel'));
+      sw.classList.add('sel');
+      state.bgColor = sw.dataset.color;
+      if (bgColorPreview) bgColorPreview.style.background = state.bgColor;
+      applyPreview();
+    });
+  });
+
+  /* --- PRESETS --- */
+  const PRESETS = {
+    cinema: { fontSize: 28, fontColor: '#ffffff', bgColor: 'rgba(0,0,0,0.9)',   bgOpacity: 90, font: 'Sora',    letterSpacing: 0 },
+    soft:   { fontSize: 20, fontColor: '#f0f0f0', bgColor: 'rgba(30,30,60,0.7)',bgOpacity: 70, font: 'DM Sans', letterSpacing: 0 },
+    brand:  { fontSize: 24, fontColor: '#1d8fe8', bgColor: 'rgba(0,0,0,0.85)', bgOpacity: 85, font: 'Sora',    letterSpacing: 1 },
+    large:  { fontSize: 36, fontColor: '#ffffff', bgColor: 'rgba(0,0,0,0.88)', bgOpacity: 88, font: 'Manrope', letterSpacing: 0 },
+  };
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const preset = PRESETS[btn.dataset.preset];
+      if (!preset) return;
+      Object.assign(state, preset);
+
+      // Update slider values
+      if (fontSlider)     fontSlider.value     = state.fontSize;
+      if (opacitySlider)  opacitySlider.value  = state.bgOpacity;
+      if (letterSlider)   letterSlider.value   = state.letterSpacing;
+      if (fontSelect)     fontSelect.value     = state.font;
+
+      applyPreview();
+      showToast(`✓ Preset "${btn.dataset.preset}" applied`);
+    });
+  });
+
+  /* --- TOGGLE ROWS --- */
   function bindToggle(rowId, stateKey) {
     const row = document.getElementById(rowId);
     if (!row) return;
@@ -206,94 +217,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  bindToggle('toggleHighContrast', 'highContrast');
+  bindToggle('toggleHighContrast',  'highContrast');
   bindToggle('toggleSpeakerLabels', 'speakerLabels');
-  bindToggle('toggleOrigText', 'originalText');
-  bindToggle('toggleAutoScroll', 'autoScroll');
-  bindToggle('toggleWordByWord', 'wordByWord');
+  bindToggle('toggleOrigText',      'originalText');
+  bindToggle('toggleAutoScroll',    'autoScroll');
+  bindToggle('toggleWordByWord',    'wordByWord');
 
-  /* ─────────────────────────────────────
-     RESET TO DEFAULTS
-  ───────────────────────────────────── */
+  /* --- RESET --- */
   document.getElementById('resetDefaultBtn')?.addEventListener('click', () => {
     Object.assign(state, DEFAULTS);
+    if (fontSlider)     fontSlider.value     = DEFAULTS.fontSize;
+    if (maxWidthSlider) maxWidthSlider.value = DEFAULTS.maxWidth;
+    if (letterSlider)   letterSlider.value   = DEFAULTS.letterSpacing;
+    if (opacitySlider)  opacitySlider.value  = DEFAULTS.bgOpacity;
+    if (fontSelect)     fontSelect.value     = DEFAULTS.font;
+    if (positionSelect) positionSelect.value = DEFAULTS.position;
 
-    // Reset slider values
-    if (fontSlider) fontSlider.value = DEFAULTS.fontSize;
-    if (opacitySlider) opacitySlider.value = DEFAULTS.bgOpacity;
-
-    // Reset swatches
-    document.querySelectorAll('#fontColorGroup .color-swatch').forEach((s, i) => s.classList.toggle('sel', i === 0));
-    document.querySelectorAll('#bgColorGroup .color-swatch').forEach((s, i) => s.classList.toggle('sel', i === 0));
-
-    // Reset position
-    document.querySelectorAll('.position-btn').forEach(b => b.classList.toggle('sel', b.dataset.pos === 'bottom'));
-
-    // Reset style buttons
-    ['boldBtn','italicBtn','outlineBtn'].forEach(id => document.getElementById(id)?.classList.remove('active'));
-    document.getElementById('shadowBtn')?.classList.add('active');
-
-    // Reset toggles
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
     ['toggleHighContrast','toggleSpeakerLabels','toggleOrigText','toggleAutoScroll','toggleWordByWord'].forEach(id => {
       const row = document.getElementById(id);
-      const sw = row?.querySelector('.toggle-switch');
+      const sw  = row?.querySelector('.toggle-switch');
       const key = row?.dataset.stateKey;
-      if (sw) sw.classList.toggle('off', !DEFAULTS[key]);
+      if (sw && key) sw.classList.toggle('off', !DEFAULTS[key]);
     });
 
     applyPreview();
     showToast('✓ Settings reset to defaults');
   });
 
-  /* ─────────────────────────────────────
-     SAVE SETTINGS
-  ───────────────────────────────────── */
+  /* --- SAVE --- */
   const saveBtn = document.getElementById('saveCapBtn');
   saveBtn?.addEventListener('click', () => {
-    // Persist to localStorage-like via sessionStorage
     sessionStorage.setItem('captionSettings', JSON.stringify(state));
-
     saveBtn.textContent = '✓ Saved!';
     saveBtn.classList.add('saved');
     setTimeout(() => {
-      saveBtn.textContent = 'Save Settings';
+      saveBtn.textContent = 'Save';
       saveBtn.classList.remove('saved');
     }, 2200);
-
-    showToast('✓ Caption settings saved successfully');
+    showToast('✓ Caption settings saved');
+    fetch('http://localhost:3000/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'captions', data: state })
+    }).catch(() => {});
   });
 
-  /* ─────────────────────────────────────
-     CANCEL → GO BACK
-  ───────────────────────────────────── */
-  document.getElementById('cancelCapBtn')?.addEventListener('click', () => {
-    history.back();
-  });
-
-  /* ─────────────────────────────────────
-     KEYBOARD SHORTCUTS
-  ───────────────────────────────────── */
+  /* --- KEYBOARD SHORTCUTS --- */
   document.addEventListener('keydown', e => {
-    // Ctrl/Cmd + S → Save
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      saveBtn?.click();
-    }
-    // Ctrl/Cmd + Z → Reset
-    if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-      e.preventDefault();
-      document.getElementById('resetDefaultBtn')?.click();
-    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveBtn?.click(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); document.getElementById('resetDefaultBtn')?.click(); }
   });
 
-  /* ─────────────────────────────────────
-     INITIAL RENDER
-  ───────────────────────────────────── */
-  // Pre-tick active defaults
-  document.getElementById('shadowBtn')?.classList.add('active');
-  // Set slider initial values
-  if (fontSlider) fontSlider.value = state.fontSize;
-  if (opacitySlider) opacitySlider.value = state.bgOpacity;
-
+  /* --- INIT --- */
+  if (fontSlider)     fontSlider.value     = state.fontSize;
+  if (maxWidthSlider) maxWidthSlider.value = state.maxWidth;
+  if (letterSlider)   letterSlider.value   = state.letterSpacing;
+  if (opacitySlider)  opacitySlider.value  = state.bgOpacity;
   applyPreview();
+
 });

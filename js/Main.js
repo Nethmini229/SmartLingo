@@ -1,8 +1,3 @@
-
-document.addEventListener('DOMContentLoaded', () => {
-  }
-});
-
 /* ─── TOAST NOTIFICATION ─── */
 function showToast(msg, duration = 2800) {
   let toast = document.getElementById('globalToast');
@@ -48,10 +43,10 @@ function initNavScroll() {
 /* ─── SHARED TOPBAR NAV INJECTION ─── */
 
 const NAV_PAGES = [
-  { href: 'index.html',      icon: 'home',        label: 'Home'            },
-  { href: 'meeting.html',    icon: 'videocam',     label: 'Live Meeting'    },
-  { href: 'transcript.html', icon: 'description',  label: 'Transcript'      },
-  { href: 'captions.html',   icon: 'tune',         label: 'Caption Settings'},
+  { href: 'Landing.html',      icon: 'home',        label: 'Home'            },
+  { href: 'Meeting.html',    icon: 'videocam',     label: 'Live Meeting'    },
+  { href: 'Trans.html', icon: 'description',  label: 'Transcript'      },
+  { href: 'Captions.html',   icon: 'tune',         label: 'Caption Settings'},
 ];
 
 function buildTopbarNav() {

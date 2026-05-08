@@ -12,20 +12,21 @@
 </head>
 <body class="login-page">
 
-<header class="shared-topbar">
-  <a href="Landing.html"><img src="SmartLingo Logo.jpeg" alt="SmartLingo"></a>
-  <div class="topbar-sep"></div>
-  <span class="topbar-page-title">Sign In</span>
-
-
-  <div id="topbarNav"></div>
-
-  <div style="display:flex;gap:8px;align-items:center">
-    <a href="Meeting.html" style="text-decoration:none">
-      <button class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:5px">
-        <span class="material-icons" style="font-size:15px">videocam</span>Try Demo
-      </button>
-    </a>
+<!-- NAV -->
+<header class="sl-nav">
+  <a href="Landing.html" class="sl-nav-brand">
+    <img src="SmartLingo Logo.jpeg" alt="SmartLingo" class="sl-nav-logo">
+    <span class="sl-nav-name">SmartLingo</span>
+  </a>
+  <nav class="sl-nav-links">
+    <a href="Landing.html">Home</a>
+    <a href="Meeting.html">Meeting</a>
+    <a href="Captions.html">Captions</a>
+    <a href="Trans.html">Transcripts</a>
+  </nav>
+  <div class="sl-nav-right">
+    <a href="Login.html" class="sl-nav-signin">Sign in</a>
+    <a href="Login.html" class="sl-nav-start">Start free</a>
   </div>
 </header>
 
@@ -33,27 +34,40 @@
   <div class="login-wrap">
     <div class="login-card">
 
-      <!--FORM STATE-->
+      <!-- FORM STATE -->
       <div id="formState">
+        <div class="card-logo-icon">S</div>
         <h1 class="card-title">Welcome back</h1>
-        <p class="card-sub">Please enter your details to sign in.</p>
+        <p class="card-sub">Sign in to access your transcripts and settings.</p>
+
+        <!-- GOOGLE FIRST -->
+        <button class="btn-google" id="googleBtn">
+          <div class="google-icon-real">
+            <svg width="18" height="18" viewBox="0 0 48 48">
+              <path fill="#EA4335" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.09-6.09C34.46 3.09 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.18l7.08 5.51C12.4 13.72 17.73 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.1 24.5c0-1.64-.15-3.22-.42-4.75H24v9h12.42c-.54 2.9-2.18 5.36-4.64 7.01l7.19 5.59C43.04 37.23 46.1 31.3 46.1 24.5z"/>
+              <path fill="#FBBC05" d="M10.72 28.31A14.6 14.6 0 0 1 9.5 24c0-1.49.26-2.93.72-4.31l-7.08-5.51A23.93 23.93 0 0 0 0 24c0 3.87.93 7.53 2.57 10.76l8.15-6.45z"/>
+              <path fill="#34A853" d="M24 47c5.5 0 10.12-1.82 13.49-4.95l-7.19-5.59C28.6 37.96 26.41 38.5 24 38.5c-6.27 0-11.6-4.22-13.28-9.94l-8.15 6.45C6.07 42.64 14.45 47 24 47z"/>
+            </svg>
+          </div>
+          Continue with Google
+        </button>
+
+        <div class="divider"><div class="divider-line"></div><span>OR</span><div class="divider-line"></div></div>
 
         <form id="loginForm" novalidate>
           <div class="form-group">
-            <label for="email">Email address</label>
+            <label for="email">Email</label>
             <div class="input-wrap">
-              <input class="form-input" type="email" id="email" placeholder="name@company.com" autocomplete="email">
+              <input class="form-input" type="email" id="email" placeholder="you@example.com" autocomplete="email">
             </div>
             <div class="field-error" id="emailError">Please enter a valid email address.</div>
           </div>
 
           <div class="form-group">
-            <div class="label-row">
-              <label for="password">Password</label>
-              <a href="#" class="forgot-link">Forgot password?</a>
-            </div>
+            <label for="password">Password</label>
             <div class="input-wrap">
-              <input class="form-input" type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+              <input class="form-input" type="password" id="password" placeholder="At least 8 characters" autocomplete="current-password">
               <button type="button" class="pw-toggle" id="pwToggle" aria-label="Toggle password">
                 <span class="material-icons" style="font-size:20px" id="pwIcon">visibility_off</span>
               </button>
@@ -62,42 +76,65 @@
           </div>
 
           <button type="submit" class="btn-signin" id="submitBtn">
-            <span class="btn-text">Sign In</span>
+            <span class="btn-text">Sign in</span>
             <div class="spinner"></div>
           </button>
         </form>
 
-        <div class="divider"><div class="divider-line"></div><span>Or continue with</span><div class="divider-line"></div></div>
-
-        <button class="btn-google" id="googleBtn">
-          <div class="google-icon">G</div>Continue with Google
-        </button>
-
-        <div class="signup-row">Don't have an account? <a href="#">Sign up for free</a></div>
-
-        <!--Quick nav for existing users-->
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-          <p style="font-size:12px;color:#94a3b8;text-align:center;margin-bottom:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase">Or jump straight to</p>
-          <div style="display:flex;gap:8px">
-            <a href="Meeting.html" style="flex:1;text-decoration:none">
-              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-                <span class="material-icons" style="font-size:15px">videocam</span>Meeting
-              </button>
-            </a>
-            <a href="Trans.html" style="flex:1;text-decoration:none">
-              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-                <span class="material-icons" style="font-size:15px">description</span>Transcript
-              </button>
-            </a>
-            <a href="Captions.html" style="flex:1;text-decoration:none">
-              <button style="width:100%;padding:10px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--dark);font-family:var(--font-body);transition:all .2s" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--dark)'">
-                <span class="material-icons" style="font-size:15px">tune</span>Captions
-              </button>
-            </a>
-          </div>
-        </div>
+        <div class="signup-row">New here? <a href="#" id="showRegister">Create an account</a></div>
+        <div class="back-home-row"><a href="Landing.html">Back to home</a></div>
       </div>
 
+      <!-- REGISTER FORM -->
+      <div id="registerState" style="display:none">
+        <div class="card-logo-icon">S</div>
+        <h1 class="card-title">Create account</h1>
+        <p class="card-sub">Sign up for free to get started.</p>
+
+        <form id="registerForm" novalidate>
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <div class="input-wrap">
+              <input class="form-input" type="text" id="regName" placeholder="Your full name">
+            </div>
+            <div class="field-error" id="regNameError">Please enter your name.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regEmail">Email address</label>
+            <div class="input-wrap">
+              <input class="form-input" type="email" id="regEmail" placeholder="you@example.com">
+            </div>
+            <div class="field-error" id="regEmailError">Please enter a valid email address.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="regPassword" placeholder="At least 8 characters">
+            </div>
+            <div class="field-error" id="regPasswordError">Password must be at least 8 characters.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regConfirm">Confirm Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="regConfirm" placeholder="Repeat your password">
+            </div>
+            <div class="field-error" id="regConfirmError">Passwords do not match.</div>
+          </div>
+
+          <button type="submit" class="btn-signin" id="registerBtn">
+            <span class="btn-text">Create Account</span>
+            <div class="spinner"></div>
+          </button>
+        </form>
+
+        <div class="signup-row">Already have an account? <a href="#" id="showLogin">Sign in</a></div>
+        <div class="back-home-row"><a href="Landing.html">Back to home</a></div>
+      </div>
+
+      <!-- SUCCESS STATE -->
       <div class="success-state" id="successState">
         <div class="success-icon-wrap"><span class="material-icons">check_circle</span></div>
         <h3>Signed in successfully!</h3>
@@ -108,7 +145,7 @@
   </div>
 </main>
 
-<!--FOOTER-->
+<!-- FOOTER -->
 <footer class="login-footer">
   <div class="login-footer-links">
     <a href="Landing.html">Home</a>

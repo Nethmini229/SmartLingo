@@ -1,24 +1,82 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-
-  /* ---- STATE ---- */
+/* ------STATE-----*/
   let isPaused   = false;
   let isMuted    = false;
   let uttIdx     = 0;
   let dataUsage  = 1.2;
+  let MEETING_ID = localStorage.getItem('meetingID') || 1;
+  console.log('Initial MEETING_ID', MEETING_ID);
+  /* --- load meetings from backend (example) --- */
+  async function loadMeetings() {
+    try {
+      const resp = await fetch('http://localhost:3000/meetings');
+      const meetings = await resp.json();
+      if (meetings.length) {
+        localStorage.setItem('meetingID', meetings[0].id); 
+        MEETING_ID = meetings[0].id;
+        console.log('Updated MEETING_ID:', MEETING_ID);
+      // store first meeting id for demo
+      // you can render the title/date somewhere on the page
+      const titleEl = document.getElementById('meetingTitleText');
+      if (titleEl) titleEl.textContent = meetings[0].title;
+      } else {
+        const createResp = await fetch('http://localhost:3000/meetings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+             title:'SmartLingo Meeting', description:'Auto-created meeting.', start_time: new Date().toISOString(), end_time:null 
+            })
+        });
+        const newMeeting = await createResp.json();
+        localStorage.setItem('meetingID', newMeeting.id);
+        const titleEl = document.getElementById('meetingTitleText');
+        if (titleEl) titleEl.textContent = newMeeting.title;
+      }
+    } catch (err) {
+      console.warn('failed to load meetings', err);
+    }
+  }
 
-  const UTTERANCES = [
+  loadMeetings();
+
+  // fetch captions from backend (meeting 1 used as example)
+  async function loadCaptions(meetingId) {
+    try {
+      const resp = await fetch(`http://localhost:3000/meetings/${meetingId}/captions`);
+      const rows = await resp.json();
+      return rows.map(r => ({
+        id: r.id,
+        spk: r.speaker,
+        time: r.timestamp,
+        orig: r.text,
+        trans: ''
+      }));
+    } catch (err) {
+      console.warn('loadCaptions error', err);
+      return [];
+    }
+  }
+
+  const SAMPLE_UTTERANCES = [
     { spk:'Speaker 2', time:'14:02:45', orig:'"The throughput metrics look very promising based on last quarter\'s data."', trans:'スループットの指標は、前四半期のデータに基づくと、非常に有望です。' },
     { spk:'Speaker 1', time:'14:03:02', orig:'"Agreed. Let\'s schedule a deep dive with the engineering team next week."', trans:'同意します。来週、エンジニアリングチームとのディープダイブを予定しましょう。' },
     { spk:'Speaker 2', time:'14:03:18', orig:'"I\'ll also prepare a scalability report for the board presentation."', trans:'取締役会のプレゼンのために、スケーラビリティレポートも準備します。' },
     { spk:'Speaker 1', time:'14:03:35', orig:'"Perfect. Can we revisit the load balancer configuration before then?"', trans:'完璧です。その前にロードバランサの設定を見直すことはできますか？' },
     { spk:'Speaker 2', time:'14:03:55', orig:'"Yes, I\'ll coordinate with Robert on the infrastructure review."', trans:'はい、インフラのレビューについてロバートと調整します。' },
   ];
+  let UTTERANCES = [...SAMPLE_UTTERANCES];
+
+  // attempt to overwrite with server data
+ loadCaptions(MEETING_ID).then(arr => { 
+  console.log('Captions from server:', arr.length);
+  if (arr.length) UTTERANCES = arr; 
+});
 
   /* ---- TRANSCRIPT ---- */
   const transcriptArea = document.getElementById('transcriptArea');
 
-  function addUtterance() {
+  async function addUtterance() {
+    console.log('addUtterance called, uttIdx:', uttIdx, 'total:', UTTERANCES.length, 'isPaused:', isPaused);
     if (isPaused || uttIdx >= UTTERANCES.length) return;
     const u = UTTERANCES[uttIdx++];
     const showOrig = !document.getElementById('origTextToggle')?.classList.contains('off');
@@ -31,9 +89,34 @@ document.addEventListener('DOMContentLoaded', () => {
     div.innerHTML = `
       <div class="utterance-meta"><span class="spk-dot"></span>${u.spk} &bull; ${u.time}</div>
       ${showOrig ? `<div class="utterance-orig">${u.orig}</div>` : ''}
-      <div class="utterance-trans">${u.trans}</div>`;
+      <div class="utterance-trans">${u.trans}</div>
+      <button class="correct-btn" onclick="correctTranslation(this)"
+        data-orig="${u.orig}" data-trans="${u.trans}">
+        Correct Translation</button>
+    `;
     transcriptArea?.appendChild(div);
     if (transcriptArea) transcriptArea.scrollTop = transcriptArea.scrollHeight;
+
+    // if this utterance isn't persisted (no id) send it to the backend
+    if (!u.id) {
+      try {
+        console.log('Saving caption to meeting:', MEETING_ID);
+        const resp = await fetch(`http://localhost:3000/meetings/${MEETING_ID}/captions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ speaker: u.spk, text: u.orig, timestamp: u.time })
+        });
+        const data = await resp.json();
+        console.log('Server response:', resp.status, data);
+        if (resp.ok && data.id) {
+          u.id = data.id; 
+          console.log('Caption saved with id:', data.id);
+          // mark as saved
+        }
+      } catch (err) {
+        console.error('failed to save caption', err.message);
+      }
+    }
   }
 
   setInterval(addUtterance, 5000);
@@ -252,5 +335,229 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModal(capModal);
     showToast('✓ Caption settings saved');
   });
+ /* ======== SPEECH RECOGNITION (Web Speech API) ======== */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recBtn = document.getElementById('recBtn');
 
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  let isRecording = false;
+
+  recognition.onresult = async (event) => {
+    const last = event.results[event.results.length - 1];
+    if (!last.isFinal) return;
+    const text = last[0].transcript.trim();
+    if (!text) return;
+
+    const now = new Date().toLocaleTimeString('en-GB');
+
+    const langMap = {
+      'Japanese': 'en|ja', 'Spanish': 'en|es', 'French': 'en|fr',
+      'German': 'en|de', 'Portuguese': 'en|pt', 'English': 'en|en'
+    };
+    const selectedLang = document.getElementById('toLangSelect')?.value || 'Japanese';
+    const langPair = langMap[selectedLang] || 'en|es';
+
+    let translatedText = '';
+try {
+  // Check corrections first (adaptive learning)
+  const corrResp = await fetch(`http://localhost:3000/corrections/${selectedLang}`);
+  const corrections = await corrResp.json();
+  const match = corrections.find(c => 
+    c.original_text.toLowerCase().trim() === text.toLowerCase().trim()
+  );
+
+  if (match) {
+    // Use the corrected translation
+    translatedText = match.correct_translation;
+    showToast('🧠 Using learned correction!');
+  } else {
+    // Use Apertium translation
+    const transResp = await fetch('http://localhost:3000/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, langPair })
+    });
+    const transData = await transResp.json();
+    translatedText = transData.translatedText || '';
+  }
+} catch (err) {
+  console.warn('Translation failed:', err.message);
+}
+
+    const newUtt = { spk: 'Speaker 1', time: now, orig: `"${text}"`, trans: translatedText };
+    UTTERANCES.push(newUtt);
+    await addUtterance();
+    showToast('✅ Speech recognized!');
+  };
+
+  recognition.onerror = (e) => {
+    showToast('❌ Speech error: ' + e.error);
+    isRecording = false;
+    if (recBtn) { recBtn.style.background = ''; recBtn.title = 'Start Recording'; }
+  };
+
+  recBtn?.addEventListener('click', () => {
+    if (!isRecording) {
+      recognition.start();
+      isRecording = true;
+      if (recBtn) { recBtn.style.background = '#ef4444'; recBtn.title = 'Stop Recording'; }
+      showToast('🎙 Listening... speak now!');
+    } else {
+      recognition.stop();
+      isRecording = false;
+      if (recBtn) { recBtn.style.background = ''; recBtn.title = 'Start Recording'; }
+      showToast('⏹ Stopped listening');
+    }
+  });
+
+} else {
+  showToast('❌ Use Chrome browser for speech recognition!');
+}
+/* ======== ADAPTIVE LEARNING ======== */
+window.correctTranslation = async function(btn) {
+  const orig  = btn.dataset.orig;
+  const wrong = btn.dataset.trans;
+  const correct = prompt('Enter the correct translation:', wrong);
+  if (!correct || correct === wrong) return;
+
+  const selectedLang = document.getElementById('toLangSelect')?.value || 'Japanese';
+
+  try {
+    const resp = await fetch('http://localhost:3000/corrections', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        original_text: orig,
+        wrong_translation: wrong,
+        correct_translation: correct,
+        language: selectedLang
+      })
+    });
+    if (resp.ok) {
+      // Update the translation on screen
+      const transEl = btn.previousElementSibling;
+      if (transEl) transEl.textContent = correct;
+      btn.textContent = '✅ Corrected';
+      btn.disabled = true;
+      btn.style.color = 'var(--green)';
+      showToast('✅ Correction saved! AI will learn from this.');
+    }
+  } catch (err) {
+    showToast('❌ Failed to save correction');
+  }
+};
+/* ======== TAB AUDIO CAPTURE (Zoom/Google Meet) ======== */
+let tabStream = null;
+let tabRecognition = null;
+
+document.getElementById('tabCaptureBtn')?.addEventListener('click', async () => {
+  if (tabStream) {
+    tabStream.getTracks().forEach(t => t.stop());
+    tabStream = null;
+    tabRecognition?.stop();
+    tabRecognition = null;
+    document.getElementById('tabCaptureBtn').style.background = '';
+    document.getElementById('tabCaptureBtn').innerHTML = '<span class="material-icons">tab</span>Tab Audio';
+    showToast('⏹ Tab audio capture stopped');
+    return;
+  }
+
+  try {
+    tabStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+      audio: true
+    });
+
+    const audioTracks = tabStream.getAudioTracks();
+    if (audioTracks.length === 0) {
+      showToast('⚠ No audio detected. Check "Share tab audio" when sharing!');
+      tabStream.getTracks().forEach(t => t.stop());
+      tabStream = null;
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    tabRecognition = new SpeechRecognition();
+    tabRecognition.continuous = true;
+    tabRecognition.interimResults = true;
+    tabRecognition.lang = 'en-US';
+
+    tabRecognition.onresult = async (event) => {
+      const last = event.results[event.results.length - 1];
+      if (!last.isFinal) return;
+      const text = last[0].transcript.trim();
+      if (!text) return;
+
+      const now = new Date().toLocaleTimeString('en-GB');
+      const langMap = {
+        'Spanish':    'en|es',
+        'French':     'en|fr',
+        'German':     'en|de',
+        'Japanese':   'en|ja',
+        'Portuguese': 'en|pt',
+        'Chinese':    'en|zh',
+        'Korean':     'en|ko'
+      };
+      const selectedLang = document.getElementById('toLangSelect')?.value || 'Spanish';
+      const langPair = langMap[selectedLang] || 'en|es';
+
+      let translatedText = '';
+      try {
+        const corrResp = await fetch(`http://localhost:3000/corrections/${selectedLang}`);
+        const corrections = await corrResp.json();
+        const match = corrections.find(c =>
+          c.original_text.toLowerCase().trim() === text.toLowerCase().trim()
+        );
+        if (match) {
+          translatedText = match.correct_translation;
+          showToast('🧠 Using learned correction!');
+        } else {
+          const transResp = await fetch('http://localhost:3000/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, langPair })
+          });
+          const transData = await transResp.json();
+          translatedText = transData.translatedText || '';
+        }
+      } catch (err) {
+        console.warn('Translation failed:', err.message);
+      }
+
+      const newUtt = { spk: 'Meeting Audio', time: now, orig: `"${text}"`, trans: translatedText };
+      UTTERANCES.push(newUtt);
+      await addUtterance();
+    };
+
+    tabRecognition.onerror = (e) => {
+      console.warn('Tab recognition error:', e.error);
+    };
+
+    tabStream.getVideoTracks()[0].onended = () => {
+      tabRecognition?.stop();
+      tabStream = null;
+      tabRecognition = null;
+      document.getElementById('tabCaptureBtn').style.background = '';
+      document.getElementById('tabCaptureBtn').innerHTML = '<span class="material-icons">tab</span>Tab Audio';
+      showToast('⏹ Tab sharing ended');
+    };
+
+    tabRecognition.start();
+    document.getElementById('tabCaptureBtn').style.background = '#22c55e';
+    document.getElementById('tabCaptureBtn').style.color = 'white';
+    document.getElementById('tabCaptureBtn').innerHTML = '<span class="material-icons">tab</span>Stop Tab';
+    showToast('✅ Tab audio captured! Subtitles will appear from meeting audio.');
+
+  } catch (err) {
+    if (err.name === 'NotAllowedError') {
+      showToast('❌ Permission denied — please allow screen sharing');
+    } else {
+      showToast('❌ Tab capture failed: ' + err.message);
+    }
+  }
+});
 });

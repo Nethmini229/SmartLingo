@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
 
   const emailInput    = document.getElementById('email');
@@ -38,15 +37,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pwIcon) pwIcon.textContent = show ? 'visibility' : 'visibility_off';
   });
 
-  /* --- SIGN IN SUCCESS FLOW --- */
-  function doSignIn() {
+  /* --- SIGN IN SUCCESS FLOW (with backend) --- */
+  async function doSignIn() {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
-    setTimeout(() => {
+
+    try {
+      const resp = await fetch('http://localhost:3000/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.value, password: passwordInput.value })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'login failed');
+      // TODO: store user/session info as needed (e.g. in localStorage)
       formState.style.display = 'none';
       successState.style.display = 'block';
       setTimeout(() => { location.href = 'meeting.html'; }, 1600);
-    }, 1800);
+    } catch (err) {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+      alert('Login error: ' + err.message);
+    }
   }
 
   /* --- FORM SUBMIT --- */
@@ -71,4 +83,83 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     showToast('📧 Password reset link sent to your email');
   });
+  /* --- TOGGLE REGISTER / LOGIN --- */
+  const registerState  = document.getElementById('registerState');
+  const showRegisterBtn = document.getElementById('showRegister');
+  const showLoginBtn    = document.getElementById('showLogin');
+  const registerForm    = document.getElementById('registerForm');
+  const registerBtn     = document.getElementById('registerBtn');
+  const regName         = document.getElementById('regName');
+  const regEmail        = document.getElementById('regEmail');
+  const regPassword     = document.getElementById('regPassword');
+  const regConfirm      = document.getElementById('regConfirm');
+  const regNameError    = document.getElementById('regNameError');
+  const regEmailError   = document.getElementById('regEmailError');
+  const regPasswordError= document.getElementById('regPasswordError');
+  const regConfirmError = document.getElementById('regConfirmError');
+
+  // show register form
+  showRegisterBtn?.addEventListener('click', e => {
+    e.preventDefault();
+    formState.style.display = 'none';
+    registerState.style.display = 'block';
+  });
+
+  // show login form
+  showLoginBtn?.addEventListener('click', e => {
+    e.preventDefault();
+    registerState.style.display = 'none';
+    formState.style.display = 'block';
+  });
+
+  /* --- REGISTER SUBMIT --- */
+  async function doRegister() {
+    registerBtn.classList.add('loading');
+    registerBtn.disabled = true;
+
+    try {
+      const resp = await fetch('http://localhost:3000/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: regName.value,
+          email: regEmail.value,
+          password: regPassword.value
+        })
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || 'Registration failed');
+
+      // registration successful — switch to login
+      registerState.style.display = 'none';
+      formState.style.display = 'block';
+      showToast('✅ Account created! Please sign in.');
+    } catch (err) {
+      registerBtn.classList.remove('loading');
+      registerBtn.disabled = false;
+      alert('Register error: ' + err.message);
+    }
+  }
+
+  registerForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    const nameOk  = regName.value.length >= 2;
+    const emailOk = isValidEmail(regEmail.value);
+    const passOk  = isValidPass(regPassword.value);
+    const matchOk = regPassword.value === regConfirm.value;
+
+    if (!nameOk)  { regNameError.classList.add('show'); }
+    if (!emailOk) { regEmailError.classList.add('show'); }
+    if (!passOk)  { regPasswordError.classList.add('show'); }
+    if (!matchOk) { regConfirmError.classList.add('show'); }
+
+    if (nameOk && emailOk && passOk && matchOk) doRegister();
+  });
+  function showToast(msg) {
+    const toast = document.getElementById('globalToast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
 });
