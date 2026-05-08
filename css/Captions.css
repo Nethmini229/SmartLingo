@@ -22,7 +22,6 @@ body.captions-page {
   display: flex;
   flex-direction: column;
 }
-
 /* ---- NAV ---- */
 .sl-nav {
   display: flex;
